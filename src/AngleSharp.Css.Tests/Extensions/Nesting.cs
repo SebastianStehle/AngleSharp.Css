@@ -44,6 +44,24 @@ namespace AngleSharp.Css.Tests.Extensions
         }
 
         [Test]
+        public void SimpleSelectorNestingImplicitDeclarationsWordBreak()
+        {
+            var source = @"<!doctype html><head><style>.foo {
+  color: green;
+  .bar {
+    word-break: break-word;
+  }
+}</style></head><body class='foo'><div class='bar'>Larger and green";
+            var document = ParseDocument(source);
+            var window = document.DefaultView;
+            var element = document.QuerySelector(".bar");
+            var styleCollection = window.GetStyleCollection();
+            var style = styleCollection.GetDeclarations(element);
+
+            Assert.AreEqual("break-word", style.GetWordBreak());
+        }
+
+        [Test]
         public void SimpleSelectorNestingExplicit()
         {
             var source = @"<!doctype html><head><style>.foo {
